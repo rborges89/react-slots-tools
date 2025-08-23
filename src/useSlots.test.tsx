@@ -1,9 +1,15 @@
 import * as React from "react";
+import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { useSlots } from "./useSlots";
 
-function UnderTest({ children }: { children: React.ReactNode }) {
-  const { get, has, list } = useSlots(children);
+type ChildrenType = { children: React.ReactNode };
+
+type AvailableTestType = "header" | "footer";
+
+function UnderTest({ children }: ChildrenType) {
+  const { slots, get, has, list } = useSlots<AvailableTestType>(children);
+
   return (
     <div>
       <div data-testid="has-header">{String(has("header"))}</div>
@@ -19,12 +25,14 @@ describe("useSlots", () => {
     const { getByTestId } = render(
       <UnderTest>
         <h1 slot="header">Title</h1>
-        <p slotName="header">Subtitle</p>
+        <p slot-parent="header">Subtitle</p>
         <span>Default A</span>
         <i>Default B</i>
-        <small slot-name="footer">Foot</small>
+        <small slot-parent="footer">Foot</small>
       </UnderTest>
     );
+
+    console.log(getByTestId("has-header"));
 
     expect(getByTestId("has-header").textContent).toBe("true");
     expect(getByTestId("header-count").textContent).toBe("2");

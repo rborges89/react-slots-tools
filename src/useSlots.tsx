@@ -1,78 +1,95 @@
 import * as React from "react";
-
-/** Props admitidos para nombrar un slot en un child. */
-export type SlotNameProp = {
-  /** Preferido: <Child slot="header" /> (similar a Web Components) */
-  slot?: string;
-  /** Alternativas soportadas para DX */
-  slotName?: string;
-  ["slot-name"]?: string;
-};
-
-/** Mapa de slots: nombre -> lista de nodos (soporta varios elementos por slot). */
-export type NamedSlotsMap = {
-  default?: React.ReactNode[];
-  [name: string]: React.ReactNode[] | undefined;
-};
-
-export type UseSlotsResult = {
-  /** Objeto con todos los slots nombrados y el default. */
-  slots: NamedSlotsMap;
-  /** Devuelve los children del slot solicitado o un fallback. */
-  get: (name: string, fallback?: React.ReactNode) => React.ReactNode;
-  /** Indica si existe contenido para el slot. */
-  has: (name: string) => boolean;
-  /** Devuelve el array puro de un slot (útil si necesitas mapear). */
-  list: (name: string) => React.ReactNode[];
-};
+import {
+  ATTR_SLOT_NAME,
+  ATTR_SLOT_NAME_LITERAL,
+  SlotNameProp,
+  NamedSlotsMap,
+  UseSlotsResult,
+  hookOptions,
+} from "./types";
 
 /**
  * Hook para extraer "slots" desde children por nombre.
  * Reconoce props: slot, slotName y "slot-name".
  * Todo child sin nombre cae en el slot 'default'.
  */
-export function useSlots(children: React.ReactNode): UseSlotsResult {
-  const slots = React.useMemo<NamedSlotsMap>(() => {
-    const out: NamedSlotsMap = { default: [] };
-    const arr = React.Children.toArray(children) as React.ReactNode[];
+export function useSlots<T extends string>(
+  children: React.ReactNode,
+  options: hookOptions = { forcedAllSlots: false }
+): UseSlotsResult<T> {
+  if (!children) {
+    throw new Error("react-slot-tools: required children parameter is missing");
+  }
 
-    for (const node of arr) {
+  const slots = React.useMemo<NamedSlotsMap<T>>(() => {
+    const out: NamedSlotsMap<T> = { default: [] } as NamedSlotsMap<T>;
+
+    const slotsAsArray: React.ReactNode = React.Children.toArray(
+      children
+    ) as Array<React.ReactNode>;
+
+    for (const slotChild of slotsAsArray) {
       // Si es un elemento React, puede traer props con el nombre del slot
-      if (React.isValidElement(node)) {
-        const props = (node.props ?? {}) as SlotNameProp & Record<string, unknown>;
-        const name = (props.slot ?? props.slotName ?? (props as any)["slot-name"]) as
-          | string
-          | undefined;
+      if (React.isValidElement(slotChild)) {
+        const props = (slotChild.props ?? {}) as SlotNameProp &
+          Record<string, unknown>;
 
-        const key = (name && String(name).trim()) || "default";
-        if (!out[key]) out[key] = [];
-        (out[key] as React.ReactNode[]).push(node);
+        /* Buscando el nombre del slot, puede ser la propiedad slot-name sino es default */
+        const name = (props.slot ??
+          props.slotName ??
+          (props as any)[ATTR_SLOT_NAME_LITERAL]) as string | undefined;
+
+        const slotKey = ((name && String(name).trim()) || "default") as
+          | T
+          | "default";
+
+        if (!out[slotKey]) {
+          (out[slotKey as T] as React.ReactNode[]) = [
+            slotChild as React.ReactNode,
+          ];
+        } else {
+          (out[slotKey as T] as React.ReactNode[]).push(slotChild);
+        }
       } else {
         // string | number | etc: lo consideramos contenido del default
-        if (!out.default) out.default = [];
-        out.default.push(node);
+        if (!out.default) {
+          out.default = [];
+        }
+
+        out.default.push(slotChild);
       }
     }
+
     return out;
   }, [children]);
 
   const get = React.useCallback(
     (name: string, fallback?: React.ReactNode) => {
-      const list = slots[name];
-      if (list && list.length) return list;
+      const list = slots[name as T];
+
+      if (list && list.length) {
+        return list;
+      }
+
       return fallback ?? null;
     },
     [slots]
   );
 
-  const has = React.useCallback((name: string) => {
-    const list = slots[name];
-    return !!(list && list.length);
-  }, [slots]);
+  const has = React.useCallback(
+    (name: string) => {
+      const list = slots[name as T];
+      return !!(list && list.length);
+    },
+    [slots]
+  );
 
-  const list = React.useCallback((name: string) => {
-    return (slots[name] ?? []) as React.ReactNode[];
-  }, [slots]);
+  const list = React.useCallback(
+    (name: string) => {
+      return (slots[name as T] ?? []) as React.ReactNode[];
+    },
+    [slots]
+  );
 
   return { slots, get, has, list };
 }
