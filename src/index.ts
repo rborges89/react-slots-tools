@@ -1,2 +1,2 @@
+export type { NamedSlotsMap, UseSlotsResult, SlotNameProp } from "./types";
 export * from "./useSlots";
-export type { NamedSlotsMap, UseSlotsResult, SlotNameProp } from "./useSlots";

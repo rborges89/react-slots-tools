@@ -9,9 +9,9 @@ import {
 } from "./types";
 
 /**
- * Hook para extraer "slots" desde children por nombre.
- * Reconoce props: slot, slotName y "slot-name".
- * Todo child sin nombre cae en el slot 'default'.
+ * Hook for extract "slots" from children special prop.
+ * Recognizes props: slot, slotName and "slot-name".
+ * All child without name belongs 'default' slot.
  */
 export function useSlots<T extends string>(
   children: React.ReactNode,
@@ -60,11 +60,15 @@ export function useSlots<T extends string>(
       }
     }
 
+    /* if (options.forcedAllSlots) {
+      const keysExceptDefault = Object.keys(out).filter((k) => k !== "default");
+    } */
+
     return out;
   }, [children]);
 
   const get = React.useCallback(
-    (name: string, fallback?: React.ReactNode) => {
+    (name: T | "default", fallback?: React.ReactNode) => {
       const list = slots[name as T];
 
       if (list && list.length) {
@@ -77,7 +81,7 @@ export function useSlots<T extends string>(
   );
 
   const has = React.useCallback(
-    (name: string) => {
+    (name: T | "default") => {
       const list = slots[name as T];
       return !!(list && list.length);
     },
@@ -85,7 +89,7 @@ export function useSlots<T extends string>(
   );
 
   const list = React.useCallback(
-    (name: string) => {
+    (name: T | "default") => {
       return (slots[name as T] ?? []) as React.ReactNode[];
     },
     [slots]

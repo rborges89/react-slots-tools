@@ -20,11 +20,11 @@ export type UseSlotsResult<T> = {
         default?: React.ReactNode[];
     };
     /** Devuelve los children del slot solicitado o un fallback. */
-    get: (name: string, fallback?: React.ReactNode) => React.ReactNode;
+    get: (name: T | "default", fallback?: React.ReactNode) => React.ReactNode;
     /** Indica si existe contenido para el slot. */
-    has: (name: string) => boolean;
+    has: (name: T | "default") => boolean;
     /** Devuelve el array puro de un slot (útil si necesitas mapear). */
-    list: (name: string) => React.ReactNode[];
+    list: (name: T | "default") => React.ReactNode[];
 };
 
 export type hookOptions = {
