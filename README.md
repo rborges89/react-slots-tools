@@ -12,7 +12,7 @@ pnpm add @burning89/react-slots-tools
 yarn add @burning89/react-slots-tools
 ```
 
-## Uso rápido
+## Use
 
 ```tsx
 import * as React from "react";
