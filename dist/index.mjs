@@ -6,6 +6,13 @@ import * as React from 'react';
 var ATTR_SLOT_NAME_LITERAL = "parent-slot";
 
 // src/useSlots.tsx
+function getNodeName(element) {
+  if (React.isValidElement(element)) {
+    const props = element.props ?? {};
+    return props.slot ?? props.slotName ?? props[ATTR_SLOT_NAME_LITERAL];
+  }
+  return null;
+}
 function useSlots(children, options = { forcedAllSlots: false }) {
   if (!children) {
     throw new Error("react-slot-tools: required children parameter is missing");
@@ -17,8 +24,7 @@ function useSlots(children, options = { forcedAllSlots: false }) {
     );
     for (const slotChild of slotsAsArray) {
       if (React.isValidElement(slotChild)) {
-        const props = slotChild.props ?? {};
-        const name = props.slot ?? props.slotName ?? props[ATTR_SLOT_NAME_LITERAL];
+        const name = getNodeName(slotChild);
         const slotKey = name && String(name).trim() || "default";
         if (!out[slotKey]) {
           out[slotKey] = [
