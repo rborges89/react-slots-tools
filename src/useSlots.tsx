@@ -8,6 +8,19 @@ import {
   hookOptions,
 } from "./types";
 
+function getNodeName(element: React.ReactNode): string | null | undefined {
+  if (React.isValidElement(element)) {
+    const props = (element.props ?? {}) as SlotNameProp &
+      Record<string, unknown>;
+
+    return (props.slot ??
+      props.slotName ??
+      (props as any)[ATTR_SLOT_NAME_LITERAL]) as string | null;
+  }
+
+  return null;
+}
+
 /**
  * Hook for extract "slots" from children special prop.
  * Recognizes props: slot, slotName and "slot-name".
@@ -29,15 +42,9 @@ export function useSlots<T extends string>(
     ) as Array<React.ReactNode>;
 
     for (const slotChild of slotsAsArray) {
-      // Si es un elemento React, puede traer props con el nombre del slot
       if (React.isValidElement(slotChild)) {
-        const props = (slotChild.props ?? {}) as SlotNameProp &
-          Record<string, unknown>;
-
-        /* Buscando el nombre del slot, puede ser la propiedad slot-name sino es default */
-        const name = (props.slot ??
-          props.slotName ??
-          (props as any)[ATTR_SLOT_NAME_LITERAL]) as string | undefined;
+        /* search slot name */
+        const name = getNodeName(slotChild);
 
         const slotKey = ((name && String(name).trim()) || "default") as
           | T
@@ -51,7 +58,6 @@ export function useSlots<T extends string>(
           (out[slotKey as T] as React.ReactNode[]).push(slotChild);
         }
       } else {
-        // string | number | etc: lo consideramos contenido del default
         if (!out.default) {
           out.default = [];
         }
