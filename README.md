@@ -18,10 +18,8 @@ yarn add @burning89/react-slots-tools
 - All child **without name** belongs `default` slot.
 - Return arrays to suppport **many childs by slot**.
 
-```tsx
-
 Using the get method of the API:
-
+```tsx
 import * as React from "react";
 import { useSlots } from "@burning89/react-slots-tools";
 
@@ -50,9 +48,8 @@ export default function Demo() {
 }
 ```
 
-```tsx
 Using the generated slots:
-
+```tsx
 type AvailableParentSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
