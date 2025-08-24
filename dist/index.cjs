@@ -25,7 +25,7 @@ var React__namespace = /*#__PURE__*/_interopNamespace(React);
 // src/useSlots.tsx
 
 // src/types.ts
-var ATTR_SLOT_NAME_LITERAL = "slot-parent";
+var ATTR_SLOT_NAME_LITERAL = "parent-slot";
 
 // src/useSlots.tsx
 function useSlots(children, options = { forcedAllSlots: false }) {

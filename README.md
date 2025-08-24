@@ -14,7 +14,14 @@ yarn add @burning89/react-slots-tools
 
 ## Use
 
+- Recognize `slot`, `slotName` y `"parent-slot"`.
+- All child **without name** belongs `default` slot.
+- Return arrays to suppport **many childs by slot**.
+
 ```tsx
+
+Using the get method of the API:
+
 import * as React from "react";
 import { useSlots } from "@burning89/react-slots-tools";
 
@@ -22,6 +29,7 @@ type AvailableParentSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
   const { get } = useSlots<AvailableParentSlotsType>(children);
+
   return (
     <div>
       <header>{get("header", <div>No header</div>)}</header>
@@ -36,7 +44,35 @@ export default function Demo() {
     <Card>
       <h1 slot="header">title</h1>
       <p>Default content</p>
-      <small slot-name="footer">© 2025</small>
+      <small parent-slot="footer">© 2025</small>
+    </Card>
+  );
+}
+```
+
+```tsx
+Using the generated slots:
+
+type AvailableParentSlotsType = "header" | "footer";
+
+function Card({ children }: { children: React.ReactNode }) {
+  const { slots } = useSlots<AvailableParentSlotsType>(children);
+
+  return (
+    <div>
+      <header>{slots.header}</header>
+      <section>{slots.default}</section>
+      <footer>{slots.footer}</footer>
+    </div>
+  );
+}
+
+export default function Demo() {
+  return (
+    <Card>
+      <h1 slot="header">title</h1>
+      <p>Default content</p>
+      <small parent-slot="footer">© 2025</small>
     </Card>
   );
 }
@@ -46,16 +82,12 @@ export default function Demo() {
 
 ```ts
 function useSlots<T>(children: React.ReactNode): {
-  slots: Record<string, React.ReactNode[] | undefined>; // incluye 'default'
-  get(name: T | "default", fallback?: React.ReactNode): React.ReactNode; // list of slots or fallback
-  has(name: T | "default"): boolean; //exist slot
-  list(name: T | "default"): React.ReactNode[]; // list of slots
+  slots: Record<string, React.ReactNode[] | undefined>; // return T slots (include 'default' slot)
+  get(name: T | "default", fallback?: React.ReactNode): React.ReactNode; // get slot by name or fallback
+  has(name: T | "default"): boolean; //check if slot exist
+  list(name: T | "default"): React.ReactNode[]; // slots list by name or fallback
 };
 ```
-
-- Recognize `slot`, `slotName` y `"slot-name"`.
-- All child **without name** belongs `default` slot.
-- Return arrays to suppport **many childs by slot**.
 
 ## Scripts
 

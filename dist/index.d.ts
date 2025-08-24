@@ -1,7 +1,7 @@
 import * as React$1 from 'react';
 
-type ATTR_SLOT_NAME = "slot-parent";
-declare const ATTR_SLOT_NAME_LITERAL: "slot-parent";
+type ATTR_SLOT_NAME = "parent-slot";
+declare const ATTR_SLOT_NAME_LITERAL: "parent-slot";
 type SlotNameProp = {
     /** Perfer: <Child slot="header" /> (similar to Web Components) */
     slot?: string;

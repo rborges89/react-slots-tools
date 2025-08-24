@@ -1,5 +1,5 @@
-export type ATTR_SLOT_NAME = "slot-parent"
-export const ATTR_SLOT_NAME_LITERAL = "slot-parent" as const
+export type ATTR_SLOT_NAME = "parent-slot"
+export const ATTR_SLOT_NAME_LITERAL = "parent-slot" as const
 
 export type SlotNameProp = {
     /** Perfer: <Child slot="header" /> (similar to Web Components) */

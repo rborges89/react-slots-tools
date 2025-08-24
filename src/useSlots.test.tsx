@@ -25,10 +25,10 @@ describe("useSlots", () => {
     const { getByTestId } = render(
       <UnderTest>
         <h1 slot="header">Title</h1>
-        <p slot-parent="header">Subtitle</p>
+        <p parent-slot="header">Subtitle</p>
         <span>Default A</span>
         <i>Default B</i>
-        <small slot-parent="footer">Foot</small>
+        <small parent-slot="footer">Foot</small>
       </UnderTest>
     );
 

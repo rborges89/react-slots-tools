@@ -3,7 +3,7 @@ import * as React from 'react';
 // src/useSlots.tsx
 
 // src/types.ts
-var ATTR_SLOT_NAME_LITERAL = "slot-parent";
+var ATTR_SLOT_NAME_LITERAL = "parent-slot";
 
 // src/useSlots.tsx
 function useSlots(children, options = { forcedAllSlots: false }) {
@@ -63,5 +63,5 @@ function useSlots(children, options = { forcedAllSlots: false }) {
 }
 
 export { useSlots };
-//# sourceMappingURL=index.js.map
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.mjs.map
+//# sourceMappingURL=index.mjs.map

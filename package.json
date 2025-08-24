@@ -30,6 +30,8 @@
     "template",
     "useSlot",
     "slot-name",
+    "slot-parent",
+    "parent-slot",
     "slots in react",
     "vue slots in react",
     "svelte slots in react",
