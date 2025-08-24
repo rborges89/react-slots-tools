@@ -52,6 +52,9 @@ export default function Demo() {
 ### Using the generated slots:
 
 ```tsx
+import * as React from "react";
+import { useSlots } from "@burning89/react-slots-tools";
+
 type ExposedSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
