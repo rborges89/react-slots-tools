@@ -6,9 +6,9 @@ Hook for named slots from react `children` special prop, (similar to Vue/Svelte/
 
 ```bash
 npm i @burning89/react-slots-tools
-# oe
+# or
 pnpm add @burning89/react-slots-tools
-# oe
+# or
 yarn add @burning89/react-slots-tools
 ```
 
