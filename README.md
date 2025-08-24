@@ -24,6 +24,7 @@ yarn add @burning89/react-slots-tools
 import * as React from "react";
 import { useSlots } from "@burning89/react-slots-tools";
 
+/* describes the supported slot names along with "default" */
 type ExposedSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
@@ -34,6 +35,8 @@ function Card({ children }: { children: React.ReactNode }) {
       <header>{get("header", <div>No header</div>)}</header>
       <section>{get("default")}</section>
       <footer>{get("footer")}</footer>
+      <!-- Warning: Typescript error because nav slot is not typed in ExposedSlotsType -->
+      <footer>{get("nav")}</footer>
     </div>
   );
 }
@@ -55,6 +58,7 @@ export default function Demo() {
 import * as React from "react";
 import { useSlots } from "@burning89/react-slots-tools";
 
+/* describes the supported slot names along with "default" */
 type ExposedSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
@@ -65,7 +69,8 @@ function Card({ children }: { children: React.ReactNode }) {
       <header>{slots.header}</header>
       <section>{slots.default}</section>
       <footer>{slots.footer}</footer>
-      <span>{slots.nav}</span> <!-- Typescript error because nav slot is not typed in ExposedSlotsType -->
+      <!-- Warning: Typescript error because nav slot is not typed in ExposedSlotsType -->
+      <span>{slots.nav}</span>
     </div>
   );
 }
@@ -85,10 +90,16 @@ export default function Demo() {
 
 ```ts
 function useSlots<T>(children: React.ReactNode): {
-  slots: Record<string, React.ReactNode[] | undefined>; // return T slots (include 'default' slot)
-  get(name: T | "default", fallback?: React.ReactNode): React.ReactNode; // get slot by name or fallback
-  has(name: T | "default"): boolean; //check if slot exist
-  list(name: T | "default"): React.ReactNode[]; // slots list by name or fallback
+  // return slots based on generic T keys (include 'default' slot)
+  slots: Partial<Record<T | "default", React.ReactNode[]>> & {
+    default: React.ReactNode[];
+  };
+  // get slot by name or fallback
+  get(name: T | "default", fallback?: React.ReactNode): React.ReactNode;
+  //check if slot exist
+  has(name: T | "default"): boolean;
+  // slots list by name or fallback
+  list(name: T | "default"): React.ReactNode[];
 };
 ```
 
