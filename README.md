@@ -62,7 +62,7 @@ function Card({ children }: { children: React.ReactNode }) {
       <header>{slots.header}</header>
       <section>{slots.default}</section>
       <footer>{slots.footer}</footer>
-      <span>{slots.nav}</span> <!-- Typescript error because nav slot is not typed in AvailableParentSlotsType -->
+      <span>{slots.~~nav~~}</span> <!-- Typescript error because nav slot is not typed in AvailableParentSlotsType -->
     </div>
   );
 }
