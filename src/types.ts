@@ -15,15 +15,15 @@ export type NamedSlotsMap<T extends string> = Partial<
 > & { default: React.ReactNode[] };
 
 export type UseSlotsResult<T> = {
-    /** Objeto con todos los slots nombrados y el default. */
+    /** Object with named slots. */
     slots: NamedSlotsMap<T extends string ? T : never> & {
         default?: React.ReactNode[];
     };
-    /** Devuelve los children del slot solicitado o un fallback. */
+    /** Return requested children slot by name or fallback. */
     get: (name: T | "default", fallback?: React.ReactNode) => React.ReactNode;
-    /** Indica si existe contenido para el slot. */
+    /** Return if slot exist. */
     has: (name: T | "default") => boolean;
-    /** Devuelve el array puro de un slot (útil si necesitas mapear). */
+    /** Return list of slots. */
     list: (name: T | "default") => React.ReactNode[];
 };
 
