@@ -24,10 +24,10 @@ yarn add @burning89/react-slots-tools
 import * as React from "react";
 import { useSlots } from "@burning89/react-slots-tools";
 
-type AvailableParentSlotsType = "header" | "footer";
+type ExposedSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
-  const { get } = useSlots<AvailableParentSlotsType>(children);
+  const { get } = useSlots<ExposedSlotsType>(children);
 
   return (
     <div>
@@ -52,17 +52,17 @@ export default function Demo() {
 ### Using the generated slots:
 
 ```tsx
-type AvailableParentSlotsType = "header" | "footer";
+type ExposedSlotsType = "header" | "footer";
 
 function Card({ children }: { children: React.ReactNode }) {
-  const { slots } = useSlots<AvailableParentSlotsType>(children);
+  const { slots } = useSlots<ExposedSlotsType>(children);
 
   return (
     <div>
       <header>{slots.header}</header>
       <section>{slots.default}</section>
       <footer>{slots.footer}</footer>
-      <span>{slots.nav}</span> <!-- Typescript error because nav slot is not typed in AvailableParentSlotsType -->
+      <span>{slots.nav}</span> <!-- Typescript error because nav slot is not typed in ExposedSlotsType -->
     </div>
   );
 }
