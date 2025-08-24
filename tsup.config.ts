@@ -9,5 +9,8 @@ export default defineConfig({
   treeshake: true,
   minify: false,
   external: ["react", "react-dom"],
-  splitting: false
+  splitting: false,
+  outExtension: (ctx) => ({
+    js: ctx.format === "esm" ? ".mjs" : ".cjs"
+  })
 });

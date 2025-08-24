@@ -21,7 +21,7 @@ function UnderTest({ children }: ChildrenType) {
 }
 
 describe("useSlots", () => {
-  it("group children por by slot name y default", () => {
+  it("group children by slot name and default", () => {
     const { getByTestId } = render(
       <UnderTest>
         <h1 slot="header">Title</h1>
