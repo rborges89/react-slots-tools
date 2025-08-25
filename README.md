@@ -12,7 +12,7 @@ pnpm add @burning89/react-slots-tools
 yarn add @burning89/react-slots-tools
 ```
 
-## Use
+## Usage
 
 - Recognize `slot`, `slotName` y `"parent-slot"`.
 - All child **without name** belongs `default` slot.
