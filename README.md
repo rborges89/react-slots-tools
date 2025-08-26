@@ -203,7 +203,7 @@ export default function MovieDetails() {
 
 ### Limitations:
 
-(Only since version 0.2.0)
+## (Only since version 0.2.0)
 Note that when you use the `slots` API in the JSX, you must narrow it down using the `as`, for example:
 
 ```tsx
