@@ -27,6 +27,9 @@ First it should be clear that this library does not restrict the use of render p
 props is that they reduce composability, with react-slots-tools your components will have a more natural appearance
 or similar to the DOM syntax and you will also be able to pass parameters from the parent slot to the child slot.
 
+Note that using slots is very useful if you want to have better separation of concerns, have dynamic bundles
+or simply want to have a modular design
+
 ## Usage
 
 - Recognize `slot` y `"parent-slot"`.
