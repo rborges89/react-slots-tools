@@ -12,13 +12,7 @@ pnpm add @burning89/react-slots-tools
 yarn add @burning89/react-slots-tools
 ```
 
-### Why Not Just Use Props?
-
-First it should be clear that this library does not restrict the use of render props. The problem with render
-props is that they reduce composability, with react-slots-tools your components will have a more natural appearance
-or similar to the DOM syntax and you will also be able to pass parameters from the parent slot to the child slot.
-
-`react-slots-tools` allows you to customize slots in your components more semantically and improves composability
+`react-slots-tools` customize slots in your components more semantically and improves composability
 
 - Lightweight
 - Composability with ease
@@ -27,7 +21,13 @@ or similar to the DOM syntax and you will also be able to pass parameters from t
 - name slots (with parameters)
 - Self-documenting with typescript
 
-## Use
+### Why Not Just Use Props?
+
+First it should be clear that this library does not restrict the use of render props. The problem with render
+props is that they reduce composability, with react-slots-tools your components will have a more natural appearance
+or similar to the DOM syntax and you will also be able to pass parameters from the parent slot to the child slot.
+
+## Usage
 
 - Recognize `slot` y `"parent-slot"`.
 - All child **without name** belongs `default` slot.
