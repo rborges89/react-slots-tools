@@ -76,10 +76,10 @@ function Card({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <header>{slots.image}</header>
-      <section>{slots.title}</section>
-      <body>{slots.description}</body>
-      <footer>{slots.actions}</footer>
+      <header>{slots.image as React.ReactNode}</header>
+      <section>{slots.title as React.ReactNode}</section>
+      <body>{slots.description as React.ReactNode}</body>
+      <footer>{slots.actions as React.ReactNode}</footer>
       <!-- type-safety -->
       <span>{slots.nav}</span> // Warning: Property 'nav' does not exist on type 'ExposedSlotsType'
     </div>
@@ -111,7 +111,7 @@ export default function MovieDetails() {
         <p parent-slot="description">{movie.synopsis}</p> // plugging your customization into the exposed slot
       </section>
       <span parent-slot="actions"> //plugging your customization into the exposed slot
-        <button> BUY </button> 
+        <button> BUY </button>
       </span>
     </Card>
   );
@@ -136,7 +136,7 @@ function Card({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-      <header>{slots.image}</header>
+      <header>{slots.image as React.ReactNode}</header>
       <section>
         <div>
           {(slots.title as SlotWithParameters)({ ...movie })}
@@ -148,9 +148,9 @@ function Card({ children }: { children: React.ReactNode }) {
         </div>
       </body>
 
-      <footer>{slots.actions}</footer>
+      <footer>{slots.actions as React.ReactNode}</footer>
       <!-- type-safety -->
-      <span>{slots.nav}</span><!-- Warning: Typescript error because nav slot is not typed in ExposedSlotsType -->
+      <span>{slots.nav as React.ReactNode}</span><!-- Warning: Typescript error because nav slot is not typed in ExposedSlotsType -->
     </div>
   );
 }
@@ -190,6 +190,26 @@ export default function MovieDetails() {
   );
 }
 ```
+
+### Limitations:
+
+(Only since version 0.2.0)
+Note that when you use the `slots` API in the JSX, you must narrow it down using the `as`, for example:
+
+```tsx
+{
+  slots.title as React.ReactNode;
+}
+```
+
+```tsx
+{
+  (slots.description as SlotWithParameters)({ ...movie });
+}
+```
+
+This is due to the internal behavior of this library, which needs to identify whether the slot is just a
+ReactNode or a TemplateSlot that can expose parameters.
 
 ## API
 
