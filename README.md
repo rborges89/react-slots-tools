@@ -29,7 +29,7 @@ natural appearance or similar to the DOM syntax and you will also be able to pas
 parent slot to the child slot.
 
 Note that using slots is very useful if you want to have better separation of concerns, have dynamic bundles
-or simply want to have a modular design
+or simply want to have a modular design.
 
 ## Usage
 
