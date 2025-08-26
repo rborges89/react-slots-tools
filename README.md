@@ -56,7 +56,7 @@ function Card({ children }: { children: React.ReactNode }) {
       <body>{get("description")}</body>
       <footer>{get("actions")}</footer>Property 'other-slot' does not exist on type 'ExposedSlotsType'
       <!-- type-safety -->
-      <footer>{get("other-slot")}</footer><!-- Warning: Property 'other-slot' does not exist on type 'ExposedSlotsType' -->
+      <footer>{get("other-slot")}</footer> //Warning: Property 'other-slot' does not exist on type 'ExposedSlotsType'
     </div>
   );
 }
@@ -81,7 +81,7 @@ function Card({ children }: { children: React.ReactNode }) {
       <body>{slots.description}</body>
       <footer>{slots.actions}</footer>
       <!-- type-safety -->
-      <span>{slots.nav}</span><!-- Warning: Property 'nav' does not exist on type 'ExposedSlotsType' -->
+      <span>{slots.nav}</span> // Warning: Property 'nav' does not exist on type 'ExposedSlotsType'
     </div>
   );
 }
@@ -103,14 +103,14 @@ export default function MovieDetails() {
 
   return (
     <Card>
-      <h1 slot="image">// plugging your customization into the exposed slot
+      <h1 slot="image"> //plugging your customization into the exposed slot
         <img src="forrest-gump-movie-image.png"/>
       </h1>
       <section>
-        <p slot="title"> {movie.name} </p> // plugging your customization into the exposed slot
+        <p slot="title"> {movie.name} </p> //plugging your customization into the exposed slot
         <p parent-slot="description">{movie.synopsis}</p> // plugging your customization into the exposed slot
       </section>
-      <span parent-slot="actions"> // plugging your customization into the exposed slot
+      <span parent-slot="actions"> //plugging your customization into the exposed slot
         <button> BUY </button> 
       </span>
     </Card>
