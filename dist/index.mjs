@@ -1,6 +1,12 @@
+import { jsx, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 
-// src/useSlots.tsx
+// src/TemplateSlot.tsx
+var TemplateSlot = ({
+  children
+}) => {
+  return /* @__PURE__ */ jsx(Fragment, { children });
+};
 
 // src/types.ts
 var ATTR_SLOT_NAME_LITERAL = "parent-slot";
@@ -9,7 +15,14 @@ var ATTR_SLOT_NAME_LITERAL = "parent-slot";
 function getNodeName(element) {
   if (React.isValidElement(element)) {
     const props = element.props ?? {};
-    return props.slot ?? props.slotName ?? props[ATTR_SLOT_NAME_LITERAL];
+    const name = props.slot ?? props[ATTR_SLOT_NAME_LITERAL];
+    return name && String(name).trim() || "default";
+  }
+  return null;
+}
+function getNodeType(element) {
+  if (React.isValidElement(element)) {
+    return element.type;
   }
   return null;
 }
@@ -23,15 +36,36 @@ function useSlots(children, options = { forcedAllSlots: false }) {
       children
     );
     for (const slotChild of slotsAsArray) {
+      let templateSlotChildren = null;
+      let nodeToPush = null;
       if (React.isValidElement(slotChild)) {
-        const name = getNodeName(slotChild);
-        const slotKey = name && String(name).trim() || "default";
-        if (!out[slotKey]) {
-          out[slotKey] = [
-            slotChild
-          ];
+        const slotKey = getNodeName(slotChild);
+        const SlotType = getNodeType(slotChild);
+        if (SlotType == TemplateSlot) {
+          templateSlotChildren = slotChild?.props?.children;
+          if (!templateSlotChildren) {
+            throw new Error(
+              "react-slot-tools: required children parameter is missing to create <TemplateSlot> component"
+            );
+          }
+        }
+        if (templateSlotChildren && typeof templateSlotChildren === "function") {
+          nodeToPush = (params) => templateSlotChildren(params);
         } else {
-          out[slotKey].push(slotChild);
+          nodeToPush = slotChild;
+        }
+        if (!out[slotKey]) {
+          if (!templateSlotChildren) {
+            out[slotKey] = [nodeToPush];
+          } else {
+            out[slotKey] = nodeToPush;
+          }
+        } else {
+          if (!templateSlotChildren) {
+            out[slotKey].push(nodeToPush);
+          } else {
+            out[slotKey] = nodeToPush;
+          }
         }
       } else {
         if (!out.default) {
@@ -68,6 +102,6 @@ function useSlots(children, options = { forcedAllSlots: false }) {
   return { slots, get, has, list };
 }
 
-export { useSlots };
+export { TemplateSlot, useSlots };
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map
