@@ -54,7 +54,7 @@ function Card({ children }: { children: React.ReactNode }) {
       <header>{get("image", <img src="generic-image"/>)}</header>
       <section>{get("title")}</section>
       <body>{get("description")}</body>
-      <footer>{get("actions")}</footer>Property 'other-slot' does not exist on type 'ExposedSlotsType'
+      <footer>{get("actions")}</footer>
       <!-- type-safety -->
       <footer>{get("other-slot")}</footer> //Warning: Property 'other-slot' does not exist on type 'ExposedSlotsType'
     </div>
