@@ -96,7 +96,7 @@ function Card({ children }: { children: React.ReactNode }) {
 import { Card } from "....";
 
 export default function MovieDetails() {
-  * This fetch request is just an example... */
+  /* This fetch request is just an example... */
   const movie = await fetch('/api/movies?name=forrest_gump').json();
   /*
     Let's imagine that this would be the response from the API:
@@ -138,7 +138,7 @@ import { useSlots, SlotWithParameters } from "@burning89/react-slots-tools";
 type ExposedSlotsType = "image" | "title" | "description" | "actions";
 
 function Card({ children }: { children: React.ReactNode }) {
-  // This fetch request is just an example...
+  /* This fetch request is just an example... */
   const movie = await fetch('/api/movies?name=forrest_gump').json();
 
   const { slots } = useSlots<ExposedSlotsType>(children);
