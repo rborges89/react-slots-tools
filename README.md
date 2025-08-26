@@ -23,9 +23,10 @@ yarn add @burning89/react-slots-tools
 
 ### Why Not Just Use Props?
 
-First it should be clear that this library does not restrict the use of render props. The problem with render
-props is that they reduce composability, with react-slots-tools your components will have a more natural appearance
-or similar to the DOM syntax and you will also be able to pass parameters from the parent slot to the child slot.
+First it should be clear that this library does not restrict the use of render props. The problem with
+render props is that they reduce composability, with react-slots-tools your components will have a more
+natural appearance or similar to the DOM syntax and you will also be able to pass parameters from the
+parent slot to the child slot.
 
 Note that using slots is very useful if you want to have better separation of concerns, have dynamic bundles
 or simply want to have a modular design
@@ -59,7 +60,8 @@ function Card({ children }: { children: React.ReactNode }) {
       <body>{get("description")}</body>
       <footer>{get("actions")}</footer>
       <!-- type-safety -->
-      <footer>{get("other-slot")}</footer> //Warning: Property 'other-slot' does not exist on type 'ExposedSlotsType'
+      //Warning: Property 'other-slot' does not exist on type 'ExposedSlotsType'
+      <footer>{get("other-slot")}</footer>
     </div>
   );
 }
@@ -84,7 +86,8 @@ function Card({ children }: { children: React.ReactNode }) {
       <body>{slots.description as React.ReactNode}</body>
       <footer>{slots.actions as React.ReactNode}</footer>
       <!-- type-safety -->
-      <span>{slots.nav}</span> // Warning: Property 'nav' does not exist on type 'ExposedSlotsType'
+      // Warning: Property 'nav' does not exist on type 'ExposedSlotsType'
+      <span>{slots.nav}</span>
     </div>
   );
 }
@@ -93,9 +96,11 @@ function Card({ children }: { children: React.ReactNode }) {
 import { Card } from "....";
 
 export default function MovieDetails() {
-  const movie = await fetch('/api/movies?name=forrest_gump').json();// This fetch request is just an example...
-  // Let's imagine that this would be the response from the API.
+  * This fetch request is just an example... */
+  const movie = await fetch('/api/movies?name=forrest_gump').json();
   /*
+    Let's imagine that this would be the response from the API:
+
     movie = {
       name: 'Forrest Gump',
       synopsis: 'The story follows the life of a kind-hearted but simple man...',
@@ -123,8 +128,8 @@ export default function MovieDetails() {
 
 ### Using slot with exposed parameters (TemplateSlot & SlotWithParameters):
 
-Let's imagine in the previous example that we need to get the movie details in the parent component `<Card>`
-and we want to customize the title and description.
+Let's imagine in the previous example that we need to get the movie details in the parent
+component `<Card>` and we want to customize the title and description.
 
 ```tsx
 import * as React from "react";
@@ -133,7 +138,8 @@ import { useSlots, SlotWithParameters } from "@burning89/react-slots-tools";
 type ExposedSlotsType = "image" | "title" | "description" | "actions";
 
 function Card({ children }: { children: React.ReactNode }) {
-  const movie = await fetch('/api/movies?name=forrest_gump').json();// This fetch request is just an example...
+  // This fetch request is just an example...
+  const movie = await fetch('/api/movies?name=forrest_gump').json();
 
   const { slots } = useSlots<ExposedSlotsType>(children);
 
@@ -153,7 +159,8 @@ function Card({ children }: { children: React.ReactNode }) {
 
       <footer>{slots.actions as React.ReactNode}</footer>
       <!-- type-safety -->
-      <span>{slots.nav as React.ReactNode}</span><!-- Warning: Typescript error because nav slot is not typed in ExposedSlotsType -->
+      //Warning: Property 'nav' does not exist on type 'ExposedSlotsType'
+      <span>{slots.nav as React.ReactNode}</span>
     </div>
   );
 }
