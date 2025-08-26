@@ -217,7 +217,7 @@ Note that when you use the `slots` API in the JSX, you must narrow it down using
 ```
 
 This is due to the internal behavior of this library, which needs to identify whether the slot is just a
-ReactNode or a TemplateSlot that can expose parameters.
+ReactNode or a TemplateSlot that can expose parameters, this limitation is planned to be fixed in future versions.
 
 ## API
 
