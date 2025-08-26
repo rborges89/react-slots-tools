@@ -1,21 +1,42 @@
 import * as React from "react";
 import {
-  ATTR_SLOT_NAME,
   ATTR_SLOT_NAME_LITERAL,
   SlotNameProp,
+  TemplateSlotPropsChildren,
+  SlotWithParameters,
   NamedSlotsMap,
   UseSlotsResult,
   hookOptions,
 } from "./types";
+import { TemplateSlot } from "./TemplateSlot";
 
-function getNodeName(element: React.ReactNode): string | null | undefined {
+/**
+ * Function to search and return node slot name.
+ * Recognizes props: slot and "slot-name".
+ */
+function getNodeName(element: React.ReactNode): string | null {
   if (React.isValidElement(element)) {
     const props = (element.props ?? {}) as SlotNameProp &
       Record<string, unknown>;
 
-    return (props.slot ??
-      props.slotName ??
-      (props as any)[ATTR_SLOT_NAME_LITERAL]) as string | null;
+    const name = (props.slot ?? (props as any)[ATTR_SLOT_NAME_LITERAL]) as
+      | string
+      | null;
+
+    return (name && String(name).trim()) || "default";
+  }
+
+  return null;
+}
+
+/**
+ * Function to search and return node type.
+ * Node type can be an especial library TempateSlot Component type (if you need use slots with parameters)
+ * or any other type of element
+ */
+function getNodeType(element: React.ReactNode): any {
+  if (React.isValidElement(element)) {
+    return element.type;
   }
 
   return null;
@@ -23,7 +44,7 @@ function getNodeName(element: React.ReactNode): string | null | undefined {
 
 /**
  * Hook for extract "slots" from children special prop.
- * Recognizes props: slot, slotName and "slot-name".
+ * Recognizes props: slot and "slot-name".
  * All child without name belongs 'default' slot.
  */
 export function useSlots<T extends string>(
@@ -42,27 +63,63 @@ export function useSlots<T extends string>(
     ) as Array<React.ReactNode>;
 
     for (const slotChild of slotsAsArray) {
+      let templateSlotChildren: TemplateSlotPropsChildren<any> | null = null;
+
+      let nodeToPush:
+        | SlotWithParameters
+        | React.ReactNode[]
+        | React.ReactNode
+        | null = null;
+
       if (React.isValidElement(slotChild)) {
         /* search slot name */
-        const name = getNodeName(slotChild);
+        const slotKey = getNodeName(slotChild) as T | "default";
 
-        const slotKey = ((name && String(name).trim()) || "default") as
-          | T
-          | "default";
+        const SlotType = getNodeType(slotChild);
+
+        if (SlotType == TemplateSlot) {
+          //is function children
+          templateSlotChildren = slotChild?.props?.children;
+
+          if (!templateSlotChildren) {
+            throw new Error(
+              "react-slot-tools: required children parameter is missing to create <TemplateSlot> component"
+            );
+          }
+        }
+
+        if (
+          templateSlotChildren &&
+          typeof templateSlotChildren === "function"
+        ) {
+          type Fn = typeof templateSlotChildren;
+          type Args = Parameters<Fn>[0];
+
+          nodeToPush = (params?: Args) =>
+            (templateSlotChildren as SlotWithParameters)(params);
+        } else {
+          nodeToPush = slotChild as React.ReactNode;
+        }
 
         if (!out[slotKey]) {
-          (out[slotKey as T] as React.ReactNode[]) = [
-            slotChild as React.ReactNode,
-          ];
+          if (!templateSlotChildren) {
+            (out[slotKey as T] as any) = [nodeToPush];
+          } else {
+            (out[slotKey as T] as any) = nodeToPush;
+          }
         } else {
-          (out[slotKey as T] as React.ReactNode[]).push(slotChild);
+          if (!templateSlotChildren) {
+            (out[slotKey as T] as any).push(nodeToPush);
+          } else {
+            (out[slotKey as T] as any) = nodeToPush;
+          }
         }
       } else {
         if (!out.default) {
           out.default = [];
         }
 
-        out.default.push(slotChild);
+        (out.default as React.ReactNode[]).push(slotChild);
       }
     }
 
