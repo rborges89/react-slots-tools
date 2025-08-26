@@ -50,7 +50,7 @@ import { useSlots } from "@burning89/react-slots-tools";
 /* describes the supported slot names along with "default" */
 type ExposedSlotsType = "image" | "title" | "description" | "actions";
 
-function Card({ children }: { children: React.ReactNode }) {
+export function Card({ children }: { children: React.ReactNode }) {
   const { get } = useSlots<ExposedSlotsType>(children);
 
   return (
@@ -76,7 +76,7 @@ import { useSlots } from "@burning89/react-slots-tools";
 /* describes the supported slot names along with "default" */
 type ExposedSlotsType = "image" | "title" | "description" | "actions";
 
-function Card({ children }: { children: React.ReactNode }) {
+export function Card({ children }: { children: React.ReactNode }) {
   const { slots } = useSlots<ExposedSlotsType>(children);
 
   return (
@@ -137,9 +137,16 @@ import { useSlots, SlotWithParameters } from "@burning89/react-slots-tools";
 
 type ExposedSlotsType = "image" | "title" | "description" | "actions";
 
-function Card({ children }: { children: React.ReactNode }) {
+export type MOVIE_TYPE = {
+    name: string;
+    synopsis: string;
+    year: number;
+    author: string;
+  }
+
+export function Card({ children }: { children: React.ReactNode }) {
   /* This fetch request is just an example... */
-  const movie = await fetch('/api/movies?name=forrest_gump').json();
+  const movie: MOVIE_TYPE = await fetch('/api/movies?name=forrest_gump').json();
 
   const { slots } = useSlots<ExposedSlotsType>(children);
 
@@ -166,15 +173,9 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 
 import { TemplateSlot } from "@burning89/react-slots-tools";
+import { Card, MOVIE_TYPE } from "....";
 
 export default function MovieDetails() {
-  type MOVIE_TYPE = {
-    name: string;
-    synopsis: string;
-    year: number;
-    author: string;
-  }
-
   return (
     <Card>
       <h1 slot="image"><img src="forrest-gump-movie-image.png"/></h1>
@@ -204,6 +205,7 @@ export default function MovieDetails() {
 ### Limitations:
 
 #### (Only since version 0.2.0)
+
 Note that when you use the `slots` API in the JSX, you must narrow it down using the `as`, for example:
 
 ```tsx
