@@ -86,6 +86,9 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
+//...Using the Card component
+import { Card } from "....";
+
 export default function MovieDetails() {
   const movie = await fetch('/api/movies?name=forrest_gump').json();// This fetch request is just an example...
   // Let's imagine that this would be the response from the API.
