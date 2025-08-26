@@ -103,12 +103,16 @@ export default function MovieDetails() {
 
   return (
     <Card>
-      <h1 slot="image"><img src="forrest-gump-movie-image.png"/></h1>
+      <h1 slot="image">// plugging your customization into the exposed slot
+        <img src="forrest-gump-movie-image.png"/>
+      </h1>
       <section>
-        <p slot="title"> {movie.name} </p>
-        <p parent-slot="description">{movie.synopsis}</p>
+        <p slot="title"> {movie.name} </p> // plugging your customization into the exposed slot
+        <p parent-slot="description">{movie.synopsis}</p> // plugging your customization into the exposed slot
       </section>
-      <span parent-slot="actions"> <button> BUY </button> </span>
+      <span parent-slot="actions"> // plugging your customization into the exposed slot
+        <button> BUY </button> 
+      </span>
     </Card>
   );
 }
