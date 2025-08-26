@@ -207,15 +207,11 @@ export default function MovieDetails() {
 Note that when you use the `slots` API in the JSX, you must narrow it down using the `as`, for example:
 
 ```tsx
-{
-  slots.title as React.ReactNode;
-}
+<header>{slots.image as React.ReactNode}</header>
 ```
 
 ```tsx
-{
-  (slots.description as SlotWithParameters)({ ...movie });
-}
+<div>{(slots.description as SlotWithParameters)({ ...movie })}</div>
 ```
 
 This is due to the internal behavior of this library, which needs to identify whether the slot is just a
